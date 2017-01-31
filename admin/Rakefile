@@ -2,6 +2,8 @@
 # Common tasks
 #
 
+require("../../../admin/rakehelper.rb")
+
 package = "font-lock-profiler"
 
 desc "Generate README.md"

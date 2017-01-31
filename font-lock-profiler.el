@@ -4,7 +4,7 @@
 
 ;; Author: Anders Lindgren
 ;; Keywords: faces, tools
-;; Version: 0.0.0
+;; Version: 0.0.1
 ;; URL: https://github.com/Lindydancer/font-lock-profiler
 
 ;; This program is free software: you can redistribute it and/or modify
@@ -248,11 +248,11 @@ respectively."
                                   'anchored-match
                                 'match))
                       ,(cond ((stringp expr)
-                              `(re-search-forward ,expr limit t))
+                              `(re-search-forward ,expr ,limit t))
                              ((symbolp expr)
-                              `(,expr limit))
+                              `(,expr ,limit))
                              (t
-                              `(funcall ,expr limit)))
+                              `(funcall ,expr ,limit)))
                       ,keyword-count
                       ,highlight-count)))
        (when (and ,res-var
@@ -566,8 +566,10 @@ ANCHORED-INFO:
             (highlight-count (nth 3 entry))
             (anchored-count  (nth 4 entry))
             (expr-result     (nth 5 entry))
-            (point-pair      (nth 6 entry))
-            (match-data-pair (nth 7 entry)))
+            ;; Not used.
+            ;; (point-pair      (nth 6 entry))
+            ;; (match-data-pair (nth 7 entry))
+            )
         (let ((keyword-entry (nth keyword-count res)))
           (if (eq kind 'match)
               (progn
@@ -646,6 +648,22 @@ ACCUMULATED-ENTRY is an element of the list returned by
     map))
 
 
+(defvar font-lock-profiler-report-expand nil)
+(make-variable-buffer-local 'font-lock-profiler-report-expand)
+
+(defvar font-lock-profiler-report-time-in-percent t)
+(make-variable-buffer-local 'font-lock-profiler-report-time-in-percent)
+
+(defvar font-lock-profiler--saved-keywords)
+(make-variable-buffer-local 'font-lock-profiler--saved-keywords)
+
+(defvar font-lock-profiler--summary)
+(make-variable-buffer-local 'font-lock-profiler--summary)
+
+(defvar font-lock-profiler--total-time)
+(make-variable-buffer-local 'font-lock-profiler--total-time)
+
+
 (define-derived-mode font-lock-profiler-report-mode tabulated-list-mode
   "Font Lock Profiler"
   "Major mode for reporting Font Long profiling results."
@@ -693,22 +711,6 @@ above the top the the window."
    (replace-regexp-in-string
     "\n" "\\\\n"
     (format "%S" expr))))
-
-
-(defvar font-lock-profiler-report-expand t)
-(make-variable-buffer-local 'font-lock-profiler-report-expand)
-
-(defvar font-lock-profiler-report-time-in-percent t)
-(make-variable-buffer-local 'font-lock-profiler-report-time-in-percent)
-
-(defvar font-lock-profiler--saved-keywords)
-(make-variable-buffer-local 'font-lock-profiler--saved-keywords)
-
-(defvar font-lock-profiler--summary)
-(make-variable-buffer-local 'font-lock-profiler--summary)
-
-(defvar font-lock-profiler--total-time)
-(make-variable-buffer-local 'font-lock-profiler--total-time)
 
 
 (defun font-lock-profiler-toggle-expand ()

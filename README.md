@@ -1,7 +1,7 @@
 # font-lock-profiler - Coverage and timing tool for font-lock keywords
 
 *Author:* Anders Lindgren<br>
-*Version:* 0.0.0<br>
+*Version:* 0.0.1<br>
 *URL:* [https://github.com/Lindydancer/font-lock-profiler](https://github.com/Lindydancer/font-lock-profiler)<br>
 
 A profiler for font-lock keywords.  This package measures time and
