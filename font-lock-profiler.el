@@ -1,10 +1,10 @@
-;;; font-lock-profiler.el --- Coverage and timing tool for font-lock keywords.  -*- lexical-binding:t -*-
+;;; font-lock-profiler.el --- Coverage and timing tool for font-lock keywords.
 
 ;; Copyright (C) 2016 Anders Lindgren
 
 ;; Author: Anders Lindgren
 ;; Keywords: faces, tools
-;; Version: 0.0.1
+;; Version: 0.0.2
 ;; URL: https://github.com/Lindydancer/font-lock-profiler
 
 ;; This program is free software: you can redistribute it and/or modify
@@ -47,8 +47,8 @@
 ;; - `font-lock-profiler-region' -- Fontify the region and present the
 ;;   profiling result.
 ;;
-;; - `font-lock-profiler-start' -- Enable "live" profiling. Do
-;;   whatever you want to do measure (like editing or scrolling). When
+;; - `font-lock-profiler-start' -- Enable "live" profiling.  Do
+;;   whatever you want to do measure (like editing or scrolling).  When
 ;;   done, run `font-lock-profiler-stop-and-report'.
 
 ;; The result buffer:
@@ -66,7 +66,7 @@
 ;;
 ;; - The variable `font-lock-profiler-remaining-matches', when set to
 ;;   an integer, the instrumented keywords will fake a match failure
-;;   after this many matches. This is useful, for example, when
+;;   after this many matches.  This is useful, for example, when
 ;;   working with keywords where a search would never terminate
 ;;   (without this, Emacs would hang).
 
@@ -83,10 +83,10 @@
 ;;
 ;; Font Lock Studio lets you *single-step* Font Lock keywords --
 ;; matchers, highlights, and anchored rules, so that you can see what
-;; happens when a buffer is fontified. You can set *breakpoints* on or
-;; inside rules and *run* until one has been hit. When inside a rule,
-;; matches are *visualized* using a palette of background colors. The
-;; *explainer* can describe a rule in plain-text English. Tight
+;; happens when a buffer is fontified.  You can set *breakpoints* on or
+;; inside rules and *run* until one has been hit.  When inside a rule,
+;; matches are *visualized* using a palette of background colors.  The
+;; *explainer* can describe a rule in plain-text English.  Tight
 ;; integration with *Edebug* allows you to step into Lisp expressions
 ;; that are part of the Font Lock keywords.
 ;;
@@ -106,12 +106,12 @@
 ;; Faceup:
 ;;
 ;; Emacs is capable of highlighting buffers based on language-specific
-;; `font-lock' rules. This package makes it possible to perform
+;; `font-lock' rules.  This package makes it possible to perform
 ;; regression test for packages that provide font-lock rules.
 ;;
 ;; The underlying idea is to convert text with highlights ("faces")
 ;; into a plain text representation using the Faceup markup
-;; language. This language is semi-human readable, for example:
+;; language.  This language is semi-human readable, for example:
 ;;
 ;;     «k:this» is a keyword
 ;;
@@ -156,7 +156,7 @@ Each entry in this list has the following form:
    (PRE-POINT POST-POINT)
    (PRE-MATCH-DATA POST-MATCH-DATA))
 
-KIND is `match'. `face', `anchored-match', `pre-match',
+KIND is `match', `face', `anchored-match', `pre-match',
 `post-match', or `anchored-face'.
 
 Entries in the list are stored in reversed order (newest entries
@@ -201,7 +201,7 @@ When KEYWORDS is nil, use the `font-lock-keywords'."
                                     anchored-count)
   "Wrapper macro for a font-lock expression in a keyword.
 
-KIND is a symbol representing the kind of the expression. EXPR is
+KIND is a symbol representing the kind of the expression.  EXPR is
 an expression.
 
 KEYWORD-COUNT, HIGHLIGHT-COUNT, and ANCHORED-COUNT are integers
@@ -235,7 +235,7 @@ respectively."
                                      &optional highlight-count)
   "Wrapper macro for a font-lock matcher.
 
-LIMIT is the end of the search. EXPR is a regexp or a
+LIMIT is the end of the search.  EXPR is a regexp or a
 function.
 
 KEYWORD-COUNT and HIGHLIGHT-COUNT are integers identifying the
@@ -379,7 +379,7 @@ about the highlight is logged in `font-lock-profiler-log'."
         (t
          ;; A MATCH-ANCHORED highlight.
          (when anchored-count
-           (error "Anchored rule inside anchored rule is illegal."))
+           (error "Anchored rule inside anchored rule is illegal"))
          (font-lock-profiler-instrument-match-anchored highlight
                                                        keyword-count
                                                        highlight-count))))
@@ -489,7 +489,9 @@ If EXCLUDE-TIMING is non-nil, exclude the timing information."
 
 
 (defun font-lock-profiler--empty-highlights-statistic-table (highlight-list)
-  "An empty highlight slot in the statistics table."
+  "An empty highlight slot in the statistics table.
+
+HIGHLIGHT-LIST is a font-lock keyword without the matcher."
   (when (not (listp highlight-list))
     (setq highlight-list (list highlight-list)))
   (when (numberp (car-safe highlight-list))
@@ -509,7 +511,7 @@ If EXCLUDE-TIMING is non-nil, exclude the timing information."
 (defun font-lock-profiler--empty-statistic-table (keywords)
   "An empty statistics table, on a format corresponding to KEYWORDS.
 
-KEYWORDS is the font-lock keywords currently profiled. It
+KEYWORDS is the font-lock keywords currently profiled.  It
 defaults to `font-lock-keywords' of the current buffer."
   (unless keywords
     (setq keywords font-lock-keywords))
@@ -527,11 +529,11 @@ defaults to `font-lock-keywords' of the current buffer."
 
 
 (defmacro font-lock-profiler--add-car (place value)
-  "Add VALUE to car of PLACE."
+  "Increase the car of PLACE with VALUE."
   `(setcar ,place (+ (car ,place) ,value)))
 
 (defmacro font-lock-profiler--increment-car (place)
-  "Increment first element in PLACE."
+  "Increase the car of PLACE with one."
   `(setcar ,place (+ (car ,place) 1)))
 
 
@@ -539,7 +541,7 @@ defaults to `font-lock-keywords' of the current buffer."
 (defun font-lock-profiler-accumulate (&optional keywords)
   "Return accumulated profile information.
 
-KEYWORDS is the font-lock keywords currently profiled. It
+KEYWORDS is the font-lock keywords currently profiled.  It
 defaults to `font-lock-keywords' of the current buffer.
 
 A list is returned, with one element for each logged font-lock keyword.
@@ -549,7 +551,7 @@ Each element has the following form:
     (TOTAL-COUNT TAKEN-COUNT MATCH-TIME (HIGHLIGHT-INFO ...))
 
 HIGHLIGHT-INFO contains information about each highlight of the
-keyword. It can either be PLAIN-INFO or ANCHORED-INFO:
+keyword.  It can either be PLAIN-INFO or ANCHORED-INFO:
 
 PLAIN-INFO:
 
@@ -624,7 +626,7 @@ HIGHLIGHT, as in the structure returned by
 
 
 (defun font-lock-profiler--sum-times-in-entry (accumulated-entry)
-  "The total sum of the matcher and the highlights.
+  "The total time of the matcher and the highlight entries.
 
 ACCUMULATED-ENTRY is an element of the list returned by
 `font-lock-profiler-accumulate'."
@@ -678,7 +680,7 @@ ACCUMULATED-ENTRY is an element of the list returned by
 
 
 (defun font-lock-profiler--compare-index (lhs rhs)
-  "Compare two index entries.
+  "Compare the index of LHS and RHS.
 
 Effectively, this sorts the list in original order."
   (< (length (memq (car lhs) font-lock-profiler--summary))
@@ -686,26 +688,28 @@ Effectively, this sorts the list in original order."
 
 
 (defun font-lock-profiler--compare-count (lhs rhs)
-  "Compare two count entries."
+  "Compare the count of LHS and RHS."
   (< (nth 1 (car lhs))
      (nth 1 (car rhs))))
 
 
 (defun font-lock-profiler--compare-times (lhs rhs)
-  "Compare two measures time entries."
+  "Compare the measured time of LHS and RHS."
   (< (font-lock-profiler--sum-times-in-entry (car lhs))
      (font-lock-profiler--sum-times-in-entry (car rhs))))
 
 
 (defun font-lock-profiler-sort ()
-  "Like `tabulated-list-sort' but ensure that the list is not positioned
-above the top the the window."
+  "Like `tabulated-list-sort' but position the window better.
+
+Ensure that the list is not positioned above the top of the window."
   (interactive)
   (tabulated-list-sort)
   (set-window-start (selected-window) (point-min) t))
 
 
 (defun font-lock-profiler-format-expr (expr)
+  "Format EXPR for the Font-Lock Profiler report window."
   (replace-regexp-in-string
    "\t" "\\\\t"
    (replace-regexp-in-string
@@ -714,6 +718,7 @@ above the top the the window."
 
 
 (defun font-lock-profiler-toggle-expand ()
+  "Expand or shrink the entries in the Font-Lock Profiler report window."
   (interactive)
   (setq font-lock-profiler-report-expand
         (not font-lock-profiler-report-expand))
@@ -721,6 +726,7 @@ above the top the the window."
 
 
 (defun font-lock-profiler-toggle-time-in-percent ()
+  "Toggle between show time in percent and absolute."
   (interactive)
   (setq font-lock-profiler-report-time-in-percent
         (not font-lock-profiler-report-time-in-percent))
@@ -728,6 +734,7 @@ above the top the the window."
 
 
 (defun font-lock-profiler--report-format-time (time)
+  "Format TIME for the Font-Lock profiler report window."
   (if font-lock-profiler-report-time-in-percent
       (if (equal font-lock-profiler--total-time 0.0)
           "n/a"
@@ -740,9 +747,22 @@ above the top the the window."
 
 (defun font-lock-profiler--report-format (padding1 index count
                                                    time padding2 expr)
-  "Format one line of the expanded font-lock keyword.
+  "Format one font-lock keyword.
 
-This is a normal highlight or part of an anchored highlight."
+This is a normal highlight or part of an anchored highlight.
+
+PADDING1 is a string of spaces to make the output
+well formed.
+
+INDEX is the order of the font-lock keyword.
+
+COUNT is the hit count.
+
+TIME is the accumulated time.
+
+PADDING2 is a strings of spaces to make the output well formed.
+
+EXPR is the highlight part of the font-lock keyword."
   (concat
    ;; First column is designed to be right aligned, since often there
    ;; are more than ten keywords.
@@ -853,6 +873,9 @@ This is a normal highlight or part of an anchored highlight."
 
 
 (defun font-lock-profiler-report (&optional keywords)
+  "Display the Font-Lock profiler report.
+
+KEYWORDS is the font-lock keywords used.  When nil, use `font-lock-keywords'."
   (interactive)
   (setq keywords (font-lock-profiler--normalize-keywords keywords))
   (let ((summary (font-lock-profiler-accumulate keywords)))
@@ -937,7 +960,7 @@ This is a normal highlight or part of an anchored highlight."
 
 
 (defun font-lock-profiler-format-log-entry (entry)
-  "Print the content of an entry in `font-lock-profiler-log'."
+  "Print the content of ENTRY in `font-lock-profiler-log'."
   (let ((kind            (nth 0 entry))
         (keyword-count   (nth 1 entry))
         (highlight-count (nth 2 entry))
