@@ -6,6 +6,7 @@
 ;; Keywords: faces, tools
 ;; Version: 0.0.2
 ;; URL: https://github.com/Lindydancer/font-lock-profiler
+;; Package-Requires: ((emacs "24.3"))
 
 ;; This program is free software: you can redistribute it and/or modify
 ;; it under the terms of the GNU General Public License as published by
@@ -141,6 +142,8 @@
 ;; of testing, not limited to font-lock regression testing.
 
 ;;; Code:
+
+(require 'tabulated-list)
 
 (defvar font-lock-profiler-log '()
   "Result of profiled font-lock keywords.
