@@ -1,11 +1,12 @@
 ;;; font-lock-profiler.el --- Coverage and timing tool for font-lock keywords.
 
-;; Copyright (C) 2016 Anders Lindgren
+;; Copyright (C) 2016-2017 Anders Lindgren
 
 ;; Author: Anders Lindgren
 ;; Keywords: faces, tools
-;; Version: 0.0.2
+;; Version: 0.0.3
 ;; URL: https://github.com/Lindydancer/font-lock-profiler
+;; Package-Requires: ((emacs "24.3"))
 
 ;; This program is free software: you can redistribute it and/or modify
 ;; it under the terms of the GNU General Public License as published by
@@ -141,6 +142,8 @@
 ;; of testing, not limited to font-lock regression testing.
 
 ;;; Code:
+
+(require 'tabulated-list)
 
 (defvar font-lock-profiler-log '()
   "Result of profiled font-lock keywords.
