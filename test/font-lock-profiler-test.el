@@ -1,4 +1,4 @@
-;;; font-lock-profiler-test.el --- Regression tests for font-lock-profiler.
+;;; font-lock-profiler-test.el --- Tests for font-lock-profiler.  -*- lexical-binding: t; -*-
 
 ;; Copyright (C) 2016 Anders Lindgren
 
